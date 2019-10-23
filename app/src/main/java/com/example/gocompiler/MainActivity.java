@@ -1,6 +1,7 @@
 package com.example.gocompiler;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -27,6 +29,9 @@ import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
 
+    final int ACT_2_REQUEST = 1;
+    final int RESULT_OK = 14;
+
     TextView tv;
     String strFile;
 
@@ -34,10 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        Button fab = findViewById(R.id.fab);
+        Button act2b = findViewById(R.id.act2button);
         fab.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("StaticFieldLeak")
             @Override
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected Void doInBackground(Integer... params) {
                         try {
-                            TextView tv = findViewById(R.id.textView);
+                            TextView tv = findViewById(R.id.infoTV);
                             tv.setText(sendPostRequest());
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -58,10 +62,23 @@ public class MainActivity extends AppCompatActivity {
                 }.execute(1);
             }
         });
+
+        act2b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity2();
+            }
+        });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void openActivity2()
+    {
+        Intent intent = new Intent(this, Activity1.class);
+        startActivityForResult(intent, ACT_2_REQUEST);
+    }
+
     private String sendPostRequest() throws IOException {
+        //zipFiles();
         URL url = new URL("http://192.168.0.13:8014");
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
@@ -81,8 +98,19 @@ public class MainActivity extends AppCompatActivity {
                 response.append(responseLine.trim());
             }
             System.out.println(response.toString());
+            //unzipFiles();
             return(response.toString());
         }
+    }
+
+    private void zipFiles()
+    {
+
+    }
+
+    private void unzipFiles()
+    {
+
     }
 
     @Override
