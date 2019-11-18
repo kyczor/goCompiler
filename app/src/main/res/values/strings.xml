@@ -8,5 +8,6 @@
     <string name="openA2">Open Activity 2</string>
     <string name="cancel">Cancel</string>
     <string name="act2info">Activity 2!</string>
+    <string name="chooseDir">Choose project directory</string>
 
 </resources>
