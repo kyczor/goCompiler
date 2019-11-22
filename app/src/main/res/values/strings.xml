@@ -5,9 +5,9 @@
     <string name="button_send_to_server">Send to server</string>
     <string name="initial_text">Initial text</string>
     <string name="server_send">Send to server</string>
-    <string name="openA2">Open Activity 2</string>
+    <string name="openA2">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="act2info">Activity 2!</string>
-    <string name="chooseDir">Choose project directory</string>
+    <string name="chooseDir">Choose file to compile</string>
 
 </resources>

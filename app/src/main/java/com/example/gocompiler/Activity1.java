@@ -122,7 +122,7 @@ public class Activity1 extends AppCompatActivity {
                 response.append(responseLine.trim());
             }
             //wypisz w konsoli - ok lub errory
-            System.out.println(response.toString());
+            //System.out.println(response.toString());
             return(response.toString());
         }
     }

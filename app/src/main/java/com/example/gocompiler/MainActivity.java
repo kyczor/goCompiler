@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         properties.extensions = null;
 
         FilePickerDialog fpd = new FilePickerDialog(this, properties);
-        fpd.setTitle("Select a directory");
+        fpd.setTitle("Select a file:");
         fpd.setDialogSelectionListener(new DialogSelectionListener() {
             @Override
             public void onSelectedFilePaths(String[] files) {

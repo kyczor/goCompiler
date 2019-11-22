@@ -4,6 +4,8 @@ import (
    	"fmt"
 	"log"
 	"os"
+  "io/ioutil"
+	"os/exec"
 	"encoding/json"
 	"encoding/base64"
    	"net/http"
@@ -31,18 +33,6 @@ func hello(w http.ResponseWriter, req *http.Request) {
     fmt.Fprintf(w, "hello\n")
 }
 
-/*
-
-func headers(w http.ResponseWriter, req *http.Request) {
-
-    for name, headers := range req.Header {
-        for _, h := range headers {
-            fmt.Fprintf(w, "%v: %v\n", name, h)
-        }
-    }
-}
-*/
-
 func test(rw http.ResponseWriter, req *http.Request) {
     decoder := json.NewDecoder(req.Body)
     var t Data
@@ -55,32 +45,71 @@ func test(rw http.ResponseWriter, req *http.Request) {
 }
 
 func b64(rw http.ResponseWriter, req *http.Request) {
+	//zdekoduj plik w b64 bedacy cialem post requesta
     decoder := json.NewDecoder(req.Body)
     var t b64Data
     err := decoder.Decode(&t)
     if err != nil {
         panic(err)
     }
-    log.Println(t)
+    //wypisuje zakodowana tresc jsona
+    //log.Println(t)
 	tb64 := t.Encode
 	dec, err := base64.StdEncoding.DecodeString(tb64)
 	if err != nil {
 		panic(err)
 	}
 
-	f, err := os.Create("testDecodeServer.txt")
+	var fileName = "checkedFile.c"
+
+	f, err := os.Create(fileName)
 	if err != nil {
+    fmt.Println("One")
 		panic(err)
 	}
 	defer f.Close()
 
+	//wypisz zdekodowana zawartosc do pliku .c o ustalonej nazwie
 	if _, err := f.Write(dec); err != nil {
+    fmt.Println("Two")
 		panic(err)
 	}
 
 	if err := f.Sync(); err != nil {
+    fmt.Println("Three")
 		panic(err)
 	}
+
+  //var outputFile = "output2.txt"
+	//out, err := exec.Command("gcc", fileName, " &> " + outputFile).Output()
+  cmd := exec.Command("bash", "-c", "gcc " + fileName)
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := cmd.Start(); err != nil {
+		log.Fatal(err)
+	}
+
+	slurp, _ := ioutil.ReadAll(stderr)
+	fmt.Printf("%s\n", slurp)
+
+	if err := cmd.Wait(); err != nil {
+		log.Fatal(err)
+	}
+    // as the out variable defined above is of type []byte we need to convert
+    // this to a string or else we will see garbage printed out in our console
+    // this is how we convert it to a string
+    // fmt.Println(" Command Successfully Executed")
+    // output := string(out[:])
+    // fmt.Println(output)
+	//out, err := exec.Command("gcc", fileName, "-o", outputFile).Output()
+	//errRun := cmd.Run()
+	// if errRun != nil {
+  //   fmt.Println("Four")
+	// 	panic(errRun)
+	// }
 
 	fmt.Fprintf(rw, "Small_success!")
 }
@@ -113,23 +142,3 @@ func main() {
 
     http.ListenAndServe(":8014", nil)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
