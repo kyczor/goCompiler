@@ -67,7 +67,7 @@ public class Activity1 extends AppCompatActivity {
                     protected Void doInBackground(Integer... params) {
                         try {
                             TextView tv = findViewById(R.id.infoTV);
-                            tv.setText(sendPostRequest());
+                            sendPostRequest(tv);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -94,13 +94,12 @@ public class Activity1 extends AppCompatActivity {
         return b64encoding;
     }
 
-    private String sendPostRequest() throws IOException {
+    private void sendPostRequest(TextView tv) throws IOException {
         String base64file = encodeB64File(filePaths[0]);
         String postJson = "{\"encode\": \"" + base64file + "\"}";
         String postJson2 = "{\"encode\": \"" + "yaaaay" + "\"}";
 
         System.out.println("POST JSON: " + postJson);
-        //
         URL url = new URL("http://192.168.0.11:8014/b64");
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
@@ -123,7 +122,8 @@ public class Activity1 extends AppCompatActivity {
             }
             //wypisz w konsoli - ok lub errory
             //System.out.println(response.toString());
-            return(response.toString());
+            tv.setText(response.toString());
         }
+        return;
     }
 }

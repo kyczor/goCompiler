@@ -26,8 +26,6 @@ type b64Data struct {
 	Encode string `json:"encode"`
 }
 
-
-
 func hello(w http.ResponseWriter, req *http.Request) {
 
     fmt.Fprintf(w, "hello\n")
@@ -80,15 +78,15 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-  //var outputFile = "output2.txt"
-	//out, err := exec.Command("gcc", fileName, " &> " + outputFile).Output()
   cmd := exec.Command("bash", "-c", "gcc " + fileName)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
+    //fmt.Println("ONE")
 		log.Fatal(err)
 	}
 
 	if err := cmd.Start(); err != nil {
+    //fmt.Println("TWO")
 		log.Fatal(err)
 	}
 
@@ -96,39 +94,13 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 	fmt.Printf("%s\n", slurp)
 
 	if err := cmd.Wait(); err != nil {
-		log.Fatal(err)
+    fmt.Println("Errors found!")
+    fmt.Println(err)
+		//log.Fatal(err)
 	}
-    // as the out variable defined above is of type []byte we need to convert
-    // this to a string or else we will see garbage printed out in our console
-    // this is how we convert it to a string
-    // fmt.Println(" Command Successfully Executed")
-    // output := string(out[:])
-    // fmt.Println(output)
-	//out, err := exec.Command("gcc", fileName, "-o", outputFile).Output()
-	//errRun := cmd.Run()
-	// if errRun != nil {
-  //   fmt.Println("Four")
-	// 	panic(errRun)
-	// }
 
-	fmt.Fprintf(rw, "Small_success!")
+	fmt.Fprintf(rw, string(slurp))
 }
-
-/*
-func decodeJson(w http.ResponseWriter, r *http.Request) {
-		var u User
-		if r.Body == nil {
-			http.Error(w, "Please send a request body", 400)
-			return
-		}
-		err := json.NewDecoder(r.Body).Decode(&u)
-		if err != nil {
-			http.Error(w, err.Error(), 400)
-			return
-		}
-		fmt.Println(u.Id)
-}
-*/
 
 func main() {
 
@@ -136,7 +108,6 @@ func main() {
     //http.HandleFunc("/headers", headers)
 	http.HandleFunc("/test", test)
 	http.HandleFunc("/b64", b64)
-	//http.HandleFunc("/", decodeJson)
 
 	log.Println("Go!")
 
