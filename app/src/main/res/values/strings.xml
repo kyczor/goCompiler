@@ -9,5 +9,6 @@
     <string name="cancel">Cancel</string>
     <string name="act2info">Activity 2!</string>
     <string name="chooseDir">Choose file to compile</string>
+    <string name="comp_succ">Compilation successful!</string>
 
 </resources>

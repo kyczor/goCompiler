@@ -11,35 +11,18 @@ import (
    	"net/http"
 )
 
-type Data struct {
-    Title   string `json:"title"`
-    Name   string `json:"name"`
-    Numbers    Nrs    `json:"numbers"`
-}
-
-type Nrs struct {
-    Age int `json:"age"`
-    Foot  int `json:"foot"`
-}
-
 type b64Data struct {
 	Encode string `json:"encode"`
+}
+
+type b64Output struct {
+  Ok bool `json: "ok"`
+  Errors string `json: "errors"`
 }
 
 func hello(w http.ResponseWriter, req *http.Request) {
 
     fmt.Fprintf(w, "hello\n")
-}
-
-func test(rw http.ResponseWriter, req *http.Request) {
-    decoder := json.NewDecoder(req.Body)
-    var t Data
-    err := decoder.Decode(&t)
-    if err != nil {
-        panic(err)
-    }
-    log.Println(t)
-	fmt.Fprintf(rw, "Small_success!")
 }
 
 func b64(rw http.ResponseWriter, req *http.Request) {
@@ -93,23 +76,27 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 	slurp, _ := ioutil.ReadAll(stderr)
 	fmt.Printf("%s\n", slurp)
 
+  didCompile := true
 	if err := cmd.Wait(); err != nil {
     fmt.Println("Errors found!")
     fmt.Println(err)
+    didCompile = false
 		//log.Fatal(err)
 	}
+  sSlurp := string(slurp)
+  retData := b64Output{didCompile, sSlurp}
+  retJson, err := json.Marshal(retData)
+  retEnc := base64.StdEncoding.EncodeToString(retJson)
 
-	fmt.Fprintf(rw, string(slurp))
+	fmt.Fprintf(rw, retEnc)
 }
 
 func main() {
 
-    http.HandleFunc("/hello", hello)
-    //http.HandleFunc("/headers", headers)
-	http.HandleFunc("/test", test)
+  http.HandleFunc("/hello", hello)
 	http.HandleFunc("/b64", b64)
 
 	log.Println("Go!")
 
-    http.ListenAndServe(":8014", nil)
+  http.ListenAndServe(":8014", nil)
 }

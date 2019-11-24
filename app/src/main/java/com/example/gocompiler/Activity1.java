@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -120,10 +123,26 @@ public class Activity1 extends AppCompatActivity {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
+            ErrorsData errData = decodeRes(response.toString());
             //wypisz w konsoli - ok lub errory
             //System.out.println(response.toString());
-            tv.setText(response.toString());
+            if(!errData.getCompiled())
+            {
+                tv.setText(errData.getErrorsList());
+            }
+            else
+            {
+                tv.setText(R.string.comp_succ);
+            }
         }
         return;
+    }
+
+    private ErrorsData decodeRes(String response) throws UnsupportedEncodingException {
+        byte[] jsonOutput = Base64.decode(response, Base64.NO_WRAP);
+        String jsonOutputString = new String(jsonOutput, "UTF-8");
+        Gson gson = new Gson();
+        ErrorsData errData = gson.fromJson(jsonOutputString, ErrorsData.class);
+        return errData;
     }
 }
