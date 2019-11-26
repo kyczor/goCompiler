@@ -30,7 +30,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -109,10 +112,9 @@ public class Activity1 extends AppCompatActivity {
         client.setRequestProperty("Content-Type", "application/json; utf-8");
         client.setRequestProperty("Accept", "application/json");
         client.setDoOutput(true);
-        String jsonInputString = postJson;
         //String jsonInputString = "{\"title\": \"Miss\",\"name\": \"Karolina\", \"numbers\": {\"age\": 23, \"foot\": 42}}";
         try(OutputStream os = client.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+            byte[] input = postJson.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
         try(BufferedReader br = new BufferedReader(
@@ -124,11 +126,13 @@ public class Activity1 extends AppCompatActivity {
                 response.append(responseLine.trim());
             }
             ErrorsData errData = decodeRes(response.toString());
+            String[] errorsParsed = parseErrors(errData.getErrorsList());
+
             //wypisz w konsoli - ok lub errory
             //System.out.println(response.toString());
             if(!errData.getCompiled())
             {
-                tv.setText(errData.getErrorsList());
+                tv.setText(Arrays.toString(errorsParsed));
             }
             else
             {
@@ -136,6 +140,21 @@ public class Activity1 extends AppCompatActivity {
             }
         }
         return;
+    }
+
+    private String[] parseErrors(String errorsList)
+    {
+        String[] temp = errorsList.split("\n");
+        List<String> parsed = new ArrayList<>();
+        for(String err : temp)
+        {
+            if(Pattern.compile("[a-zA-Z]+(.c:)\\d+(.)\\d+(: error: ).*").matcher(err).matches())
+            {
+                parsed.add(err);
+            }
+        }
+
+        return parsed.toArray(new String[0]);
     }
 
     private ErrorsData decodeRes(String response) throws UnsupportedEncodingException {

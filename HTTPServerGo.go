@@ -83,6 +83,8 @@ func b64(rw http.ResponseWriter, req *http.Request) {
     didCompile = false
 		//log.Fatal(err)
 	}
+
+  //umiesc w jsonie, zakoduj do b64 i wyslij jako response
   sSlurp := string(slurp)
   retData := b64Output{didCompile, sSlurp}
   retJson, err := json.Marshal(retData)
