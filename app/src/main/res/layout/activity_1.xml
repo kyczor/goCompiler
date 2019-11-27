@@ -5,22 +5,10 @@
     android:layout_height="fill_parent"
     tools:context=".Activity1">
 
-    <Button
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_centerHorizontal="true"
-        android:text="@string/button_send_to_server" />
-
     <TextView
         android:id="@+id/infoTV"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/fab"
         android:gravity="center"
         android:text="@string/initial_text"/>
 

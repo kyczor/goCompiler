@@ -13,12 +13,19 @@
         android:layout_centerVertical="true"
         android:text="@string/chooseDir"/>
 
-    <Button
-        android:id="@+id/act2button"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/openA2"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/chooseDirBtn"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dirTV"/>
+
+    <Button
+        android:id="@+id/sendSrvBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/server_send"
+        android:layout_below="@+id/dirTV"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

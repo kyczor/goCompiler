@@ -41,6 +41,7 @@ public class Activity1 extends AppCompatActivity {
     Intent prevIntent;
     String dirPath;
     String[] filePaths;
+    AsyncTask<Integer, Void, Void> executePostReq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,27 +62,20 @@ public class Activity1 extends AppCompatActivity {
             }
         });
 
-        Button fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("StaticFieldLeak")
+        executePostReq = new AsyncTask<Integer, Void, Void>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @SuppressLint("WrongThread")
             @Override
-            public void onClick(View view) {
-                new AsyncTask<Integer, Void, Void>(){
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @SuppressLint("WrongThread")
-                    @Override
-                    protected Void doInBackground(Integer... params) {
-                        try {
-                            TextView tv = findViewById(R.id.infoTV);
-                            sendPostRequest(tv);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-                }.execute(1);
+            protected Void doInBackground(Integer... params) {
+                try {
+                    TextView tv = findViewById(R.id.infoTV);
+                    sendPostRequest(tv);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
-        });
+        }.execute(1);
     }
 
     private String encodeB64File(String filePath) {
@@ -142,12 +136,19 @@ public class Activity1 extends AppCompatActivity {
         return;
     }
 
+    /**
+     * Funkcja skanująca kazda linie z outputu z gcc i zwracająca tylko liste errorow
+     *
+     * @param errorsList caly output z gcc
+     * @return same errory
+     */
     private String[] parseErrors(String errorsList)
     {
         String[] temp = errorsList.split("\n");
         List<String> parsed = new ArrayList<>();
         for(String err : temp)
         {
+            //sprawdz czy to ma forme erroru
             if(Pattern.compile("[a-zA-Z]+(.c:)\\d+(.)\\d+(: error: ).*").matcher(err).matches())
             {
                 parsed.add(err);
@@ -157,6 +158,12 @@ public class Activity1 extends AppCompatActivity {
         return parsed.toArray(new String[0]);
     }
 
+    /**
+     *
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     private ErrorsData decodeRes(String response) throws UnsupportedEncodingException {
         byte[] jsonOutput = Base64.decode(response, Base64.NO_WRAP);
         String jsonOutputString = new String(jsonOutput, "UTF-8");

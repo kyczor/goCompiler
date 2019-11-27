@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.developer.filepicker.controller.DialogSelectionListener;
 import com.developer.filepicker.model.DialogConfigs;
@@ -15,35 +16,39 @@ import com.developer.filepicker.model.DialogProperties;
 import com.developer.filepicker.view.FilePickerDialog;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     final int ACT_2_REQUEST = 1;
     String[] filePaths;
-    String dirPath;
+    TextView dirTV;
+    Button act2b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dirPath = "test";
+        dirTV = findViewById(R.id.dirTV);
+        dirTV.setText(R.string.path);
 
-        Button act2b = findViewById(R.id.act2button);
+        Button dirBtn = findViewById(R.id.chooseDirBtn);
+        dirBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startFilePicker();
+            }
+        });
+
+        act2b = findViewById(R.id.sendSrvBtn);
         act2b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivity2();
             }
         });
-
-        Button dirBtn = findViewById(R.id.chooseDirBtn);
-        dirBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    startFilePicker();
-                }
-        });
+        act2b.setClickable(false);
     }
 
     private void startFilePicker()
@@ -63,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSelectedFilePaths(String[] files) {
                 //files = array of paths of files selected
                 filePaths = files;
+                act2b.setClickable(true);
+                dirTV.setText(Arrays.toString(filePaths));
             }
         });
 
@@ -72,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     private void openActivity2()
     {
         Intent intent = new Intent(this, Activity1.class);
-        intent.putExtra("path", dirPath);
         intent.putExtra("filePaths", filePaths);
         startActivityForResult(intent, ACT_2_REQUEST);
     }
@@ -81,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case 9999:
                 Log.i("Test", "Result URI " + data.getData());
-                dirPath = String.valueOf(data.getData());
                 break;
         }
     }

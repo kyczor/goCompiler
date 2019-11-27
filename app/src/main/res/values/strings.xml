@@ -8,6 +8,7 @@
     <string name="openA2">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="act2info">Activity 2!</string>
+    <string name="path">Path not selected</string>
     <string name="chooseDir">Choose file to compile</string>
     <string name="comp_succ">Compilation successful!</string>
 
