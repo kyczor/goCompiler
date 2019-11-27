@@ -33,6 +33,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -62,6 +65,12 @@ public class Activity1 extends AppCompatActivity {
             }
         });
 
+        startPostReqProcess();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void startPostReqProcess()
+    {
         executePostReq = new AsyncTask<Integer, Void, Void>() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @SuppressLint("WrongThread")
@@ -76,6 +85,11 @@ public class Activity1 extends AppCompatActivity {
                 return null;
             }
         }.execute(1);
+        try {
+            executePostReq.get(1000, TimeUnit.MILLISECONDS);
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            e.printStackTrace();
+        }
     }
 
     private String encodeB64File(String filePath) {
