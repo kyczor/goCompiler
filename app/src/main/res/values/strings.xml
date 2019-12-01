@@ -7,6 +7,7 @@
     <string name="server_send">Send to server</string>
     <string name="openA2">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
     <string name="act2info">Activity 2!</string>
     <string name="path">Path not selected</string>
     <string name="chooseDir">Choose file to compile</string>

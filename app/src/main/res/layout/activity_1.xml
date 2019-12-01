@@ -6,26 +6,24 @@
     tools:context=".Activity1">
 
     <TextView
-        android:id="@+id/infoTV"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="@string/initial_text"/>
+        android:id="@+id/successTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"/>
+    <LinearLayout
+        android:id="@+id/errorButtonsLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/act2info"
-        tools:layout_centerVertical="true"
-        tools:layout_centerHorizontal="true"
-        android:layout_above="@+id/cancelFilePick"/>
     <Button
         android:id="@+id/cancelFilePick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/cancel"
+        android:text="@string/back"
         android:layout_centerHorizontal="true"
         />
 </RelativeLayout>

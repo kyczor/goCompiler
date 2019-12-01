@@ -14,6 +14,7 @@ import android.text.format.Formatter;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -54,8 +55,6 @@ public class Activity1 extends AppCompatActivity {
         prevIntent = getIntent();
         dirPath = prevIntent.getStringExtra("path");
         filePaths = prevIntent.getStringArrayExtra("filePaths");
-        TextView tv2 = findViewById(R.id.textView2);
-        tv2.setText(Arrays.toString(filePaths));
 
         Button backB = findViewById(R.id.cancelFilePick);
         backB.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +67,40 @@ public class Activity1 extends AppCompatActivity {
         startPostReqProcess();
     }
 
+    private void displayErrorButtons(String[] errorsParsed)
+    {
+        if(errorsParsed.length == 0)
+        {
+            TextView successTV = findViewById(R.id.successTV);
+            successTV.setText("Compilation successful!");
+        }
+
+        LinearLayout layout = findViewById(R.id.errorButtonsLayout);
+        for(String error : errorsParsed)
+        {
+            //nazwa_pliku, linia, znak, "error", tresc bledu
+            String[] errParts = error.split(":");
+
+            //create new horizontal linear layout
+            // and add line number as a Button
+            // and error message as a TextView
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            Button lineBtn = new Button(this);
+            lineBtn.setText(errParts[1]);
+            row.addView(lineBtn);
+            TextView errText = new TextView(this);
+            errText.setText(errParts[4]);
+            row.addView(errText);
+
+            //add the item to our layout
+            layout.addView(row);
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private void startPostReqProcess()
     {
@@ -77,8 +110,7 @@ public class Activity1 extends AppCompatActivity {
             @Override
             protected Void doInBackground(Integer... params) {
                 try {
-                    TextView tv = findViewById(R.id.infoTV);
-                    sendPostRequest(tv);
+                    sendPostRequest();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,7 +140,7 @@ public class Activity1 extends AppCompatActivity {
         return b64encoding;
     }
 
-    private void sendPostRequest(TextView tv) throws IOException {
+    private void sendPostRequest() throws IOException {
         String base64file = encodeB64File(filePaths[0]);
         String postJson = "{\"encode\": \"" + base64file + "\"}";
         String postJson2 = "{\"encode\": \"" + "yaaaay" + "\"}";
@@ -135,17 +167,7 @@ public class Activity1 extends AppCompatActivity {
             }
             ErrorsData errData = decodeRes(response.toString());
             String[] errorsParsed = parseErrors(errData.getErrorsList());
-
-            //wypisz w konsoli - ok lub errory
-            //System.out.println(response.toString());
-            if(!errData.getCompiled())
-            {
-                tv.setText(Arrays.toString(errorsParsed));
-            }
-            else
-            {
-                tv.setText(R.string.comp_succ);
-            }
+            displayErrorButtons(errorsParsed);
         }
         return;
     }
@@ -173,9 +195,11 @@ public class Activity1 extends AppCompatActivity {
     }
 
     /**
+     * Funkcja odkodowująca Json zwrocony przez serwer
+     * i zwracajaca pelna liste bledow wraz z ich opisami
      *
-     * @param response
-     * @return
+     * @param response server response
+     * @return tresci bledow
      * @throws UnsupportedEncodingException
      */
     private ErrorsData decodeRes(String response) throws UnsupportedEncodingException {
