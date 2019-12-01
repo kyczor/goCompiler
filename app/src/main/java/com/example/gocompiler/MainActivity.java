@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
-            case 9999:
+        switch(resultCode) {
+            case RESULT_OK:
                 Log.i("Test", "Result URI " + data.getData());
                 break;
         }

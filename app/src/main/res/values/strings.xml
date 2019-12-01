@@ -18,5 +18,5 @@
     <string name="warnings">Warnings</string>
     <string name="warningMsg">Warning message</string>
     <string name="comp_success">Compilation successful!</string>
-    <string name="recompile">Recompile</string>
+    <string name="recompile">Try again</string>
 </resources>

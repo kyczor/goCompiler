@@ -265,11 +265,8 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 500  && resultCode  == RESULT_OK) {
-
-            startPostReqProcess();
-        }
-    }
+        prevIntent.putExtra("key", RESULT_OK);
+        setResult(500, prevIntent);
+        finish();
+}
 }
