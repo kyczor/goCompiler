@@ -24,7 +24,7 @@ import java.io.IOException;
 public class FixErrorsActivity extends AppCompatActivity {
 
     Intent intent;
-    int line;
+    int cursorLine;
     EditText et;
     String filePath;
 
@@ -34,7 +34,7 @@ public class FixErrorsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_fix_errors);
 
         intent = getIntent();
-        line = intent.getIntExtra("lineNumber", 0);
+        cursorLine = intent.getIntExtra("lineNumber", 0);
         String[] filePaths = intent.getStringArrayExtra("filePaths");
         if (filePaths != null) {
             filePath = filePaths[0];
@@ -43,12 +43,24 @@ public class FixErrorsActivity extends AppCompatActivity {
         //read whole text from file
         File file = new File(filePath);
         StringBuilder text = new StringBuilder();
+        int cursorIndex=0;
         try
         {
+            int currLine = 1;
+            int index = 0;
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             while(line != null)
             {
+                if(currLine == cursorLine)
+                {
+                    cursorIndex = index + currLine;
+                }
+                else
+                {
+                    currLine++;
+                    index += line.length();
+                }
                 text.append(line);
                 text.append("\n");
                 line = br.readLine();
@@ -59,6 +71,7 @@ public class FixErrorsActivity extends AppCompatActivity {
 
         et = findViewById(R.id.editCode);
         et.setText(text.toString());
+        et.setSelection(cursorIndex);
         Button retryBtn = findViewById(R.id.tryAgainBtn);
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
