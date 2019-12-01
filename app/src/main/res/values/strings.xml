@@ -12,5 +12,10 @@
     <string name="path">Path not selected</string>
     <string name="chooseDir">Choose file to compile</string>
     <string name="comp_succ">Compilation successful!</string>
-
+    <string name="line">Line</string>
+    <string name="errorMsg">Error message</string>
+    <string name="errors">Errors</string>
+    <string name="warnings">Warnings</string>
+    <string name="warningMsg">Warning message</string>
+    <string name="comp_success">Compilation successful!</string>
 </resources>

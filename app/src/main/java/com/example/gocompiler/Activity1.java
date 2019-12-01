@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -67,34 +68,56 @@ public class Activity1 extends AppCompatActivity {
         startPostReqProcess();
     }
 
-    private void displayErrorButtons(String[] errorsParsed)
+    private void displayErrorButtons(String[] errorsParsed, String[] warningsParsed)
     {
-        if(errorsParsed.length == 0)
+        if(errorsParsed.length == 0 && warningsParsed.length == 0)
         {
             TextView successTV = findViewById(R.id.successTV);
-            successTV.setText("Compilation successful!");
+            successTV.setText(R.string.comp_success);
+            successTV.setVisibility(View.VISIBLE);
+            return;
         }
 
-        LinearLayout layout = findViewById(R.id.errorButtonsLayout);
-        for(String error : errorsParsed)
+        LinearLayout wrapperLayout = findViewById(R.id.errorDisplayLayout);
+        wrapperLayout.setVisibility(View.VISIBLE);
+
+        if(errorsParsed.length != 0)
         {
-            //nazwa_pliku, linia, znak, "error", tresc bledu
-            String[] errParts = error.split(":");
+            LinearLayout eLayout = findViewById(R.id.errorButtonsLayout);
+            addItemsToDisplay(eLayout, errorsParsed);
+        }
+
+        if(warningsParsed.length != 0)
+        {
+            LinearLayout wLayout = findViewById(R.id.warningButtonsLayout);
+            addItemsToDisplay(wLayout, warningsParsed);
+        }
+
+    }
+
+    private void addItemsToDisplay(LinearLayout layout, String[] items)
+    {
+        for(String item : items)
+        {
+            //nazwa_pliku, linia, znak, "error" / "warning", tresc bledu
+            String[] errParts = item.split(":");
 
             //create new horizontal linear layout
             // and add line number as a Button
             // and error message as a TextView
             LinearLayout row = new LinearLayout(this);
             row.setOrientation(LinearLayout.HORIZONTAL);
-            row.setLayoutParams(new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            row.setLayoutParams(params);
             Button lineBtn = new Button(this);
             lineBtn.setText(errParts[1]);
             row.addView(lineBtn);
-            TextView errText = new TextView(this);
-            errText.setText(errParts[4]);
-            row.addView(errText);
+            TextView itemText = new TextView(this);
+            itemText.setText(errParts[4]);
+            itemText.setPadding(10,0,10,0);
+            row.addView(itemText);
 
             //add the item to our layout
             layout.addView(row);
@@ -166,8 +189,10 @@ public class Activity1 extends AppCompatActivity {
                 response.append(responseLine.trim());
             }
             ErrorsData errData = decodeRes(response.toString());
-            String[] errorsParsed = parseErrors(errData.getErrorsList());
-            displayErrorButtons(errorsParsed);
+            ArrayList<String[]> responseParsed = parseErrors(errData.getErrorsList());
+            String[] errorsParsed = responseParsed.get(0);
+            String[] warningsParsed = responseParsed.get(1);
+            displayErrorButtons(errorsParsed, warningsParsed);
         }
         return;
     }
@@ -178,8 +203,10 @@ public class Activity1 extends AppCompatActivity {
      * @param errorsList caly output z gcc
      * @return same errory
      */
-    private String[] parseErrors(String errorsList)
+    private ArrayList<String[]> parseErrors(String errorsList)
     {
+        ArrayList<String[]> errorsAndWarnings = new ArrayList<>();
+
         String[] temp = errorsList.split("\n");
         List<String> parsed = new ArrayList<>();
         for(String err : temp)
@@ -190,8 +217,20 @@ public class Activity1 extends AppCompatActivity {
                 parsed.add(err);
             }
         }
+        errorsAndWarnings.add(parsed.toArray(new String[0]));
 
-        return parsed.toArray(new String[0]);
+        parsed = new ArrayList<>();
+        for(String err : temp)
+        {
+            //sprawdz czy to ma forme erroru
+            if(Pattern.compile("[a-zA-Z]+(.c:)\\d+(.)\\d+(: warning: ).*").matcher(err).matches())
+            {
+                parsed.add(err);
+            }
+        }
+        errorsAndWarnings.add(parsed.toArray(new String[0]));
+
+        return errorsAndWarnings;
     }
 
     /**

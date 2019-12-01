@@ -61,7 +61,7 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-  cmd := exec.Command("bash", "-c", "gcc " + fileName)
+  cmd := exec.Command("bash", "-c", "gcc " + fileName + " -Wall")
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
     //fmt.Println("ONE")
