@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class Activity1 extends AppCompatActivity {
+public class Activity1 extends AppCompatActivity implements View.OnClickListener {
     Intent prevIntent;
     String dirPath;
     String[] filePaths;
@@ -112,6 +112,7 @@ public class Activity1 extends AppCompatActivity {
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             row.setLayoutParams(params);
             Button lineBtn = new Button(this);
+            lineBtn.setOnClickListener(this);
             lineBtn.setText(errParts[1]);
             row.addView(lineBtn);
             TextView itemText = new TextView(this);
@@ -247,5 +248,28 @@ public class Activity1 extends AppCompatActivity {
         Gson gson = new Gson();
         ErrorsData errData = gson.fromJson(jsonOutputString, ErrorsData.class);
         return errData;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Button b = (Button)v;
+        int lineNum = Integer.parseInt(b.getText().toString());
+
+        //start new activity and pass line number
+        Intent intent = new Intent(this, FixErrorsActivity.class);
+        intent.putExtra("filePaths", filePaths);
+        intent.putExtra("lineNumber", lineNum);
+        startActivityForResult(intent, 500);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 500  && resultCode  == RESULT_OK) {
+
+            startPostReqProcess();
+        }
     }
 }
