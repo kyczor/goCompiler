@@ -23,14 +23,30 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/dirTV"/>
 
-    <Button
-        style="@style/buttonsStyleRev"
-        android:padding="5dp"
-        android:id="@+id/sendSrvBtn"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/server_send"
+        android:orientation="horizontal"
         android:layout_below="@+id/dirTV"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true">
+        <Button
+            style="@style/buttonsStyleRev"
+            android:padding="5dp"
+            android:id="@+id/flagsBtn"
+            android:layout_margin="5dp"
+            android:text="@string/choose_flags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            style="@style/buttonsStyleRev"
+            android:padding="5dp"
+            android:id="@+id/sendSrvBtn"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_send"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

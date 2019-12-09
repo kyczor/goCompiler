@@ -8,6 +8,7 @@
     <string name="openA2">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="back">Back</string>
+    <string name="ok">Ok</string>
     <string name="act2info">Activity 2!</string>
     <string name="path">Path not selected</string>
     <string name="chooseDir">Choose file to compile</string>
@@ -19,4 +20,5 @@
     <string name="warningMsg">Warning message</string>
     <string name="comp_success">Compilation successful!</string>
     <string name="recompile">Retry</string>
+    <string name="choose_flags">Choose flags</string>
 </resources>

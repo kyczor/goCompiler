@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="flags">
+        <item>Flag1</item>
+        <item>Flag2</item>
+        <item>Flag3</item>
+    </array>
+</resources>
