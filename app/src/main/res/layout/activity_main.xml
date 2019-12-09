@@ -8,8 +8,9 @@
     <Button
         style="@style/buttonsStyle"
         android:padding="5dp"
+        android:layout_margin="10dp"
         android:id="@+id/chooseDirBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -24,10 +25,11 @@
         android:id="@+id/dirTV"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/dirTV"
+        android:layout_margin="10dp"
         android:layout_centerHorizontal="true">
         <Button
             style="@style/buttonsStyleRev"
@@ -35,14 +37,16 @@
             android:id="@+id/flagsBtn"
             android:layout_margin="5dp"
             android:text="@string/choose_flags"
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
+            android:layout_weight="1"
             android:layout_height="wrap_content"/>
         <Button
             style="@style/buttonsStyleRev"
             android:padding="5dp"
             android:id="@+id/sendSrvBtn"
             android:layout_margin="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/server_send"
             />
