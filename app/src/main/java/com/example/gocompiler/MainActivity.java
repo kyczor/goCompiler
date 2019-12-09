@@ -76,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         selectedItems = new ArrayList<>();
+        for(int index=0; index< selectedItemsLength-1; index++)
+        {
+            if(boolSelItems[index] == true)
+            {
+                selectedItems.add(index);
+            }
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_flags);
         builder.setMultiChoiceItems(R.array.flags, boolSelItems,
