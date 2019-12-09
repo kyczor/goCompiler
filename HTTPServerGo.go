@@ -13,6 +13,7 @@ import (
 
 type b64Data struct {
 	Encode string `json:"encode"`
+  Flags string `json:"flags"`
 }
 
 type b64Output struct {
@@ -36,6 +37,7 @@ func b64(rw http.ResponseWriter, req *http.Request) {
     //wypisuje zakodowana tresc jsona
     //log.Println(t)
 	tb64 := t.Encode
+  flags := t.Flags
 	dec, err := base64.StdEncoding.DecodeString(tb64)
 	if err != nil {
 		panic(err)
@@ -61,7 +63,8 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-  cmd := exec.Command("bash", "-c", "gcc " + fileName + " -Wall")
+// tu beda zmiany we flagach
+  cmd := exec.Command("bash", "-c", "gcc " + fileName + " " + flags)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
     //fmt.Println("ONE")

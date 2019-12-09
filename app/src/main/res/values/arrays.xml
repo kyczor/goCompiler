@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="flags">
-        <item>Flag1</item>
-        <item>Flag2</item>
-        <item>Flag3</item>
+        <item>-Werror</item>
+        <item>-Wfatal-errors</item>
+        <item>-fsyntax-only</item>
+        <item>-pedantic</item>
+        <item>-Wextra</item>
     </array>
 </resources>

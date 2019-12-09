@@ -21,4 +21,7 @@
     <string name="comp_success">Compilation successful!</string>
     <string name="recompile">Retry</string>
     <string name="choose_flags">Choose flags</string>
+    <string name="path_intent">path</string>
+    <string name="flags_intent">flags</string>
+    <string name="file_paths_intent">filePaths</string>
 </resources>

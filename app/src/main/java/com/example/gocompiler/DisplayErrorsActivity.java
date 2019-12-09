@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 public class DisplayErrorsActivity extends AppCompatActivity {
     Intent prevIntent;
     String dirPath;
+    String flags;
     String[] filePaths;
     AsyncTask<Integer, Void, Void> executePostReq;
 
@@ -49,8 +50,9 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_errors);
 
         prevIntent = getIntent();
-        dirPath = prevIntent.getStringExtra("path");
-        filePaths = prevIntent.getStringArrayExtra("filePaths");
+        dirPath = prevIntent.getStringExtra(String.valueOf(R.string.path_intent));
+        flags = prevIntent.getStringExtra(String.valueOf(R.string.flags_intent));
+        filePaths = prevIntent.getStringArrayExtra(String.valueOf(R.string.file_paths_intent));
 
         Button backB = findViewById(R.id.cancelFilePick);
         backB.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +185,8 @@ public class DisplayErrorsActivity extends AppCompatActivity {
 
     private void sendPostRequest() throws IOException {
         String base64file = encodeB64File(filePaths[0]);
-        String postJson = "{\"encode\": \"" + base64file + "\"}";
+        //String postJson = "{\"encode\": \"" + base64file + "\"}";
+        String postJson = "{\"encode\": \"" + base64file + "\", \"flags\": \"" + flags + "\"}";
 
         System.out.println("POST JSON: " + postJson);
         //ip addr show

@@ -152,7 +152,8 @@ public class MainActivity extends AppCompatActivity {
     private void openActivityDispErr()
     {
         Intent intent = new Intent(this, DisplayErrorsActivity.class);
-        intent.putExtra("filePaths", filePaths);
+        intent.putExtra(String.valueOf(R.string.file_paths_intent), filePaths);
+        intent.putExtra(String.valueOf(R.string.flags_intent), flags);
         startActivityForResult(intent, ACT_2_REQUEST);
     }
 
