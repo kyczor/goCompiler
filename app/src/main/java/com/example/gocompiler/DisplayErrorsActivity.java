@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -65,7 +69,19 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         {
             TextView successTV = findViewById(R.id.successTV);
             successTV.setText(R.string.comp_success);
+            successTV.setTextSize(40);
+            successTV.setTextColor(getResources().getColor(R.color.gradient1));
+            successTV.setTypeface(null, Typeface.BOLD);
             successTV.setVisibility(View.VISIBLE);
+            TextPaint paint = successTV.getPaint();
+            float width = paint.measureText(String.valueOf(R.string.comp_success));
+
+            Shader textShader = new LinearGradient(0,0,width*1.10f,100,
+                    new int[]{getResources().getColor(R.color.gradient1),
+                            getResources().getColor(R.color.gradient2),
+                            getResources().getColor(R.color.gradient3)},
+                    null, Shader.TileMode.CLAMP);
+            successTV.getPaint().setShader(textShader);
             return;
         }
 
@@ -105,6 +121,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
             row.setLayoutParams(params);
             Button lineBtn = (Button)getLayoutInflater().inflate(R.layout.buttontemplate, null);
             lineBtn.setText(errParts[1]);
+            lineBtn.setTextSize(17);
             row.addView(lineBtn);
             final TextView itemText = new TextView(this);
             itemText.setText(errParts[4]);
