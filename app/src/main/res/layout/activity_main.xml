@@ -6,6 +6,8 @@
     tools:context=".MainActivity">
 
     <Button
+        style="@style/buttonsStyle"
+        android:padding="5dp"
         android:id="@+id/chooseDirBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,6 +16,7 @@
         android:text="@string/chooseDir"/>
 
     <TextView
+        android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/chooseDirBtn"
@@ -21,6 +24,8 @@
         android:id="@+id/dirTV"/>
 
     <Button
+        style="@style/buttonsStyleRev"
+        android:padding="5dp"
         android:id="@+id/sendSrvBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

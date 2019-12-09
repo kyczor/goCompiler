@@ -43,5 +43,4 @@
             android:text="@string/recompile"/>
     </LinearLayout>
 
-
 </RelativeLayout>

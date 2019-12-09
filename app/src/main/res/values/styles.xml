@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/warningLight</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,6 +28,14 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#691d1d</item>
         <item name="android:background">@drawable/rounded_corner_error</item>
+    </style>
+
+    <style name="buttonsStyle">
+        <item name="android:background">@drawable/gradient</item>
+    </style>
+
+    <style name="buttonsStyleRev">
+        <item name="android:background">@drawable/gradient_reversed</item>
     </style>
 
     <style name="WarningListHeadersWrapper">

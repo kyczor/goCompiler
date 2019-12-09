@@ -101,8 +101,9 @@ public class DisplayErrorsActivity extends AppCompatActivity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(5,10,5,10);
             row.setLayoutParams(params);
-            Button lineBtn = new Button(this);
+            Button lineBtn = (Button)getLayoutInflater().inflate(R.layout.buttontemplate, null);
             lineBtn.setText(errParts[1]);
             row.addView(lineBtn);
             final TextView itemText = new TextView(this);
