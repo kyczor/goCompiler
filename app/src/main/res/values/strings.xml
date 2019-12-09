@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GoCompiler</string>
+    <string name="app_name">Remote Compiler</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="button_send_to_server">Send to server</string>
@@ -18,5 +18,5 @@
     <string name="warnings">Warnings</string>
     <string name="warningMsg">Warning message</string>
     <string name="comp_success">Compilation successful!</string>
-    <string name="recompile">Try again</string>
+    <string name="recompile">Retry</string>
 </resources>

@@ -5,20 +5,43 @@
     android:layout_height="match_parent"
     tools:context=".FixErrorsActivity"
     android:gravity="center">
+    <TextView
+        android:id="@+id/displayMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/errorDark"
+        android:background="@color/errorLight"/>
     <EditText
         android:id="@+id/editCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/displayMsg"
         android:scrollbars="vertical"
         android:autofillHints="Here is your code"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         tools:ignore="UnusedAttribute"/>
-    <Button
-        android:id="@+id/tryAgainBtn"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:paddingLeft="15px"
+        android:paddingRight="15px"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editCode"
-        android:text="@string/recompile"/>
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/cancelFix"
+            android:text="@string/cancel"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/tryAgainBtn"
+            android:layout_width="0px"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:text="@string/recompile"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

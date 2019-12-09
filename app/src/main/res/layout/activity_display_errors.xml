@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    tools:context=".Activity1">
+    tools:context=".DisplayErrorsActivity">
 
     <TextView
         android:id="@+id/successTV"
@@ -93,7 +93,6 @@
             android:gravity="center">
         </LinearLayout>
     </LinearLayout>
-
 
     <Button
         android:id="@+id/cancelFilePick"

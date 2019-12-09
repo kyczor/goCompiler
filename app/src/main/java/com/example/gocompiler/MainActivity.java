@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     final int ACT_2_REQUEST = 1;
     String[] filePaths;
     TextView dirTV;
-    Button act2b;
+    Button errorListBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        act2b = findViewById(R.id.sendSrvBtn);
-        act2b.setOnClickListener(new View.OnClickListener() {
+        errorListBtn = findViewById(R.id.sendSrvBtn);
+        errorListBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity2();
+                openActivityDispErr();
             }
         });
-        act2b.setClickable(false);
+        errorListBtn.setClickable(false);
     }
 
     private void startFilePicker()
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSelectedFilePaths(String[] files) {
                 //files = array of paths of files selected
                 filePaths = files;
-                act2b.setClickable(true);
+                errorListBtn.setClickable(true);
                 dirTV.setText(Arrays.toString(filePaths));
             }
         });
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         fpd.show();
     }
 
-    private void openActivity2()
+    private void openActivityDispErr()
     {
-        Intent intent = new Intent(this, Activity1.class);
+        Intent intent = new Intent(this, DisplayErrorsActivity.class);
         intent.putExtra("filePaths", filePaths);
         startActivityForResult(intent, ACT_2_REQUEST);
     }

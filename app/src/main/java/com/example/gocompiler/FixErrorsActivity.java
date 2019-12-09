@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -39,6 +40,10 @@ public class FixErrorsActivity extends AppCompatActivity {
         if (filePaths != null) {
             filePath = filePaths[0];
         }
+
+        String msgText = intent.getStringExtra("displayMsg");
+        TextView msgTV = findViewById(R.id.displayMsg);
+        msgTV.setText(msgText);
 
         //read whole text from file
         File file = new File(filePath);
@@ -72,6 +77,15 @@ public class FixErrorsActivity extends AppCompatActivity {
         et = findViewById(R.id.editCode);
         et.setText(text.toString());
         et.setSelection(cursorIndex);
+
+        Button cancelBtn = findViewById(R.id.cancelFix);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tryAgain();
+            }
+        });
+
         Button retryBtn = findViewById(R.id.tryAgainBtn);
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override

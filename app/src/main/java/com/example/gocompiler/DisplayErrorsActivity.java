@@ -4,13 +4,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.format.Formatter;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -22,27 +19,21 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
-public class Activity1 extends AppCompatActivity implements View.OnClickListener {
+public class DisplayErrorsActivity extends AppCompatActivity {
     Intent prevIntent;
     String dirPath;
     String[] filePaths;
@@ -51,7 +42,7 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_1);
+        setContentView(R.layout.activity_display_errors);
 
         prevIntent = getIntent();
         dirPath = prevIntent.getStringExtra("path");
@@ -112,14 +103,22 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             row.setLayoutParams(params);
             Button lineBtn = new Button(this);
-            lineBtn.setOnClickListener(this);
             lineBtn.setText(errParts[1]);
             row.addView(lineBtn);
-            TextView itemText = new TextView(this);
+            final TextView itemText = new TextView(this);
             itemText.setText(errParts[4]);
             itemText.setPadding(10,0,10,0);
             row.addView(itemText);
 
+            lineBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Button b = (Button)v;
+                    String textToIntent = (String) itemText.getText();
+                    int lineNumToIntent = Integer.parseInt(b.getText().toString());
+                    createFixIntent(textToIntent, lineNumToIntent);
+                }
+            });
             //add the item to our layout
             layout.addView(row);
         }
@@ -167,16 +166,15 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
     private void sendPostRequest() throws IOException {
         String base64file = encodeB64File(filePaths[0]);
         String postJson = "{\"encode\": \"" + base64file + "\"}";
-        String postJson2 = "{\"encode\": \"" + "yaaaay" + "\"}";
 
         System.out.println("POST JSON: " + postJson);
-        URL url = new URL("http://192.168.0.11:8014/b64");
+        //ip addr show
+        URL url = new URL("http://192.168.1.60:8014/b64");
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
         client.setRequestProperty("Content-Type", "application/json; utf-8");
         client.setRequestProperty("Accept", "application/json");
         client.setDoOutput(true);
-        //String jsonInputString = "{\"title\": \"Miss\",\"name\": \"Karolina\", \"numbers\": {\"age\": 23, \"foot\": 42}}";
         try(OutputStream os = client.getOutputStream()) {
             byte[] input = postJson.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
@@ -250,15 +248,12 @@ public class Activity1 extends AppCompatActivity implements View.OnClickListener
         return errData;
     }
 
-    @Override
-    public void onClick(View v) {
-        Button b = (Button)v;
-        int lineNum = Integer.parseInt(b.getText().toString());
-
+    private void createFixIntent(String textToIntent, int lineNumToIntent){
         //start new activity and pass line number
         Intent intent = new Intent(this, FixErrorsActivity.class);
         intent.putExtra("filePaths", filePaths);
-        intent.putExtra("lineNumber", lineNum);
+        intent.putExtra("displayMsg", textToIntent);
+        intent.putExtra("lineNumber", lineNumToIntent);
         startActivityForResult(intent, 500);
     }
 
