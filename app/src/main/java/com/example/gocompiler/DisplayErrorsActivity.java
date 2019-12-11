@@ -54,7 +54,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         flags = prevIntent.getStringExtra(String.valueOf(R.string.flags_intent));
         filePaths = prevIntent.getStringArrayExtra(String.valueOf(R.string.file_paths_intent));
 
-        Button backB = findViewById(R.id.cancelFilePick);
+        Button backB = findViewById(R.id.goBackFromErrors);
         backB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,8 +189,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         String postJson = "{\"encode\": \"" + base64file + "\", \"flags\": \"" + flags + "\"}";
 
         System.out.println("POST JSON: " + postJson);
-        //ip addr show
-        URL url = new URL("http://192.168.1.60:8014/b64");
+        URL url = new URL("http://192.168.0.11:8014/b64");
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
         client.setRequestProperty("Content-Type", "application/json; utf-8");

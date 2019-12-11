@@ -99,13 +99,15 @@ public class MainActivity extends AppCompatActivity {
                      */
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        String whichKey = choicesList.get(which);
+
                         if(isChecked)
                         {
-                            selectedItems.put(choicesList.get(which),which);
+                            selectedItems.put(whichKey,which);
                         }
-                        else if(selectedItems.containsKey(choicesList.get(which)))
+                        else if(selectedItems.containsKey(whichKey))
                         {
-                            selectedItems.remove(choicesList.get(which));
+                            selectedItems.remove(whichKey);
                         }
                     }
                 });

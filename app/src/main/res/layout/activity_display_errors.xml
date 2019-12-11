@@ -12,93 +12,97 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"/>
-
-    <LinearLayout
-        android:id="@+id/errorDisplayLayout"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:gravity="center">
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
-        <TextView
-            android:text="@string/errors"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/ErrorListHeadersWrapper"/>
-
+        android:layout_above="@+id/goBackFromErrors">
         <LinearLayout
+            android:id="@+id/errorDisplayLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
-            <TextView
-                style="@style/ListHeaders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/line"
-                android:layout_weight="1"/>
-            <TextView
-                style="@style/ListHeaders"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/errorMsg"
-                android:layout_weight="3"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginStart="10dp"
-            android:id="@+id/errorButtonsLayout"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:visibility="gone"
             android:gravity="center">
-        </LinearLayout>
-
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp"/>
-        <TextView
-            android:text="@string/warnings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/WarningListHeadersWrapper"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
             <TextView
-                style="@style/ListHeaders"
-                android:layout_width="wrap_content"
+                android:text="@string/errors"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/line"
-                android:layout_weight="1"/>
+                style="@style/ErrorListHeadersWrapper"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    style="@style/ListHeaders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/line"
+                    android:layout_weight="1"/>
+                <TextView
+                    style="@style/ListHeaders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/errorMsg"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginStart="10dp"
+                android:id="@+id/errorButtonsLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+            </LinearLayout>
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
             <TextView
-                style="@style/ListHeaders"
-                android:layout_width="wrap_content"
+                android:text="@string/warnings"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/warningMsg"
-                android:layout_weight="3"/>
+                style="@style/WarningListHeadersWrapper"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    style="@style/ListHeaders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/line"
+                    android:layout_weight="1"/>
+                <TextView
+                    style="@style/ListHeaders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/warningMsg"
+                    android:layout_weight="3"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginStart="10dp"
+                android:id="@+id/warningButtonsLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+            </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginStart="10dp"
-            android:id="@+id/warningButtonsLayout"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
     <Button
         style="@style/buttonsStyleRev"
         android:padding="5dp"
         android:layout_margin="5dp"
-        android:id="@+id/cancelFilePick"
+        android:id="@+id/goBackFromErrors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
