@@ -21,21 +21,28 @@ import com.developer.filepicker.view.FilePickerDialog;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     final int ACT_2_REQUEST = 1;
     String[] filePaths;
-    ArrayList<Integer> selectedItems;
+    HashMap<String, Integer> selectedItems;
     TextView dirTV;
     Button errorListBtn;
     String flags = " -Wall";
+    List<String> choicesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        selectedItems = new ArrayList<>();
+        selectedItems = new HashMap<>();
+        choicesList = Arrays.asList(getResources().getStringArray(R.array.flags));
 
         dirTV = findViewById(R.id.dirTV);
         dirTV.setText(R.string.path);
@@ -70,18 +77,12 @@ public class MainActivity extends AppCompatActivity {
     {
         int selectedItemsLength = getResources().getStringArray(R.array.flags).length;
         boolean[] boolSelItems = new boolean[selectedItemsLength];
-        for(int selectedIndex : selectedItems)
+        Iterator it = selectedItems.entrySet().iterator();
+        //for each of the previously selected items tick the flag "on"
+        while(it.hasNext())
         {
-            boolSelItems[selectedIndex] = true;
-        }
-
-        selectedItems = new ArrayList<>();
-        for(int index=0; index< selectedItemsLength-1; index++)
-        {
-            if(boolSelItems[index] == true)
-            {
-                selectedItems.add(index);
-            }
+            Map.Entry pair = (Map.Entry)it.next();
+            boolSelItems[(int) pair.getValue()] = true;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_flags);
@@ -100,11 +101,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         if(isChecked)
                         {
-                            selectedItems.add(which);
+                            selectedItems.put(choicesList.get(which),which);
                         }
-                        else if(selectedItems.contains(which))
+                        else if(selectedItems.containsKey(choicesList.get(which)))
                         {
-                            selectedItems.remove(which);
+                            selectedItems.remove(choicesList.get(which));
                         }
                     }
                 });
@@ -113,12 +114,12 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(DialogInterface dialog, int id) {
             // get all the checked flags
             StringBuilder addToFlags = new StringBuilder();
-            for(int flagId : selectedItems)
+            Iterator it = selectedItems.entrySet().iterator();
+            while(it.hasNext())
             {
+                Map.Entry pair = (Map.Entry)it.next();
                 addToFlags.append(" ");
-                TypedArray flagsAvailable = getResources().obtainTypedArray(R.array.flags);
-                String chosenFlag = flagsAvailable.getString(flagId);
-                addToFlags.append(chosenFlag);
+                addToFlags.append(pair.getKey());
             }
 
             //update the flags' string
