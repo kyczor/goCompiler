@@ -41,6 +41,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
     Intent prevIntent;
     String dirPath;
     String flags;
+    String mainFile;
     ArrayList<String> filePaths;
     AsyncTask<Integer, Void, Void> executePostReq;
 
@@ -52,6 +53,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         prevIntent = getIntent();
         dirPath = prevIntent.getStringExtra(String.valueOf(R.string.path_intent));
         flags = prevIntent.getStringExtra(String.valueOf(R.string.flags_intent));
+        mainFile = prevIntent.getStringExtra(String.valueOf(R.string.main));
         filePaths = prevIntent.getStringArrayListExtra(String.valueOf(R.string.file_paths_intent));
 
         Button backB = findViewById(R.id.goBackFromErrors);
@@ -188,7 +190,11 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         String fileNames = fileNamesToString();
         //String base64file = encodeB64File(filePaths[0]);
         //String postJson = "{\"encode\": \"" + base64file + "\"}";
-        String postJson = "{\"encode\": [" + base64files + "], \"names\": [" + fileNames + "], \"flags\": \"" + flags + "\"}";
+        String postJson =
+                "{\"encode\": [" + base64files + "], " +
+                "\"filenames\": [" + fileNames + "], " +
+                "\"mainfile\": \"" + mainFile + "\", " +
+                "\"flags\": \"" + flags + "\"}";
 
         System.out.println("POST JSON: " + postJson);
        // URL url = new URL("http://54.80.215.77:8014/b64");
@@ -217,7 +223,6 @@ public class DisplayErrorsActivity extends AppCompatActivity {
             String[] warningsParsed = responseParsed.get(1);
             displayErrorButtons(errorsParsed, warningsParsed);
         }
-        return;
     }
 
     private String encodeAllFiles()
@@ -291,8 +296,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         byte[] jsonOutput = Base64.decode(response, Base64.NO_WRAP);
         String jsonOutputString = new String(jsonOutput, "UTF-8");
         Gson gson = new Gson();
-        ErrorsData errData = gson.fromJson(jsonOutputString, ErrorsData.class);
-        return errData;
+        return gson.fromJson(jsonOutputString, ErrorsData.class);
     }
 
     private void createFixIntent(String textToIntent, int lineNumToIntent){
