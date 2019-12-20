@@ -124,8 +124,13 @@ public class DisplayErrorsActivity extends AppCompatActivity {
             params.setMargins(5,10,5,10);
             row.setLayoutParams(params);
             Button lineBtn = (Button)getLayoutInflater().inflate(R.layout.buttontemplate, null);
-            lineBtn.setText(errParts[1]);
-            lineBtn.setTextSize(17);
+            StringBuilder sb = new StringBuilder();
+            sb.append(errParts[0]);
+            sb.append("\n");
+            sb.append("Line: ");
+            sb.append(errParts[1]);
+            lineBtn.setText(sb.toString());
+            lineBtn.setTextSize(10);
             row.addView(lineBtn);
             final TextView itemText = new TextView(this);
             itemText.setText(errParts[4]);
@@ -137,8 +142,11 @@ public class DisplayErrorsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Button b = (Button)v;
                     String textToIntent = (String) itemText.getText();
-                    int lineNumToIntent = Integer.parseInt(b.getText().toString());
-                    createFixIntent(textToIntent, lineNumToIntent);
+                    String[] whereToGo = b.getText().toString().split("\n");
+                    String[] lineNoInfo = whereToGo[1].split(" ");
+                    int lineNumToIntent = Integer.parseInt(lineNoInfo[1]);
+                    String filename = whereToGo[0];
+                    createFixIntent(textToIntent, lineNumToIntent, filename);
                 }
             });
             //add the item to our layout
@@ -198,7 +206,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
 
         System.out.println("POST JSON: " + postJson);
        // URL url = new URL("http://54.80.215.77:8014/b64");
-        URL url = new URL("http://172.20.10.2:8014/b64");
+        URL url = new URL("http://192.168.0.11:8014/b64");
 
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
@@ -242,8 +250,9 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         for(int fileId = 0; fileId<filePaths.size(); fileId++)
         {
             String[] parts = filePaths.get(fileId).split("/");
+            sb.append("\"");
             sb.append(parts[parts.length-1]);   //wez ostatnia czastke sciezki, czyli nazwe pliku
-            sb.append(", ");
+            sb.append("\", ");
         }
         return sb.substring(0, sb.length()-2);
     }
@@ -299,12 +308,13 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         return gson.fromJson(jsonOutputString, ErrorsData.class);
     }
 
-    private void createFixIntent(String textToIntent, int lineNumToIntent){
+    private void createFixIntent(String textToIntent, int lineNumToIntent, String fileName){
         //start new activity and pass line number
         Intent intent = new Intent(this, FixErrorsActivity.class);
         intent.putExtra("filePaths", filePaths);
         intent.putExtra("displayMsg", textToIntent);
         intent.putExtra("lineNumber", lineNumToIntent);
+        intent.putExtra("fileName", fileName);
         startActivityForResult(intent, 500);
     }
 

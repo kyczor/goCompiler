@@ -14,7 +14,7 @@
     <string name="chooseDir">Choose files to compile</string>
     <string name="chooseMain">Choose main file</string>
     <string name="comp_succ">Compilation successful!</string>
-    <string name="line">Line</string>
+    <string name="line">Where</string>
     <string name="errorMsg">Error message</string>
     <string name="errors">Errors</string>
     <string name="warnings">Warnings</string>

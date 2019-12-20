@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FixErrorsActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class FixErrorsActivity extends AppCompatActivity {
     int cursorLine;
     EditText et;
     String filePath;
+    String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +38,10 @@ public class FixErrorsActivity extends AppCompatActivity {
 
         intent = getIntent();
         cursorLine = intent.getIntExtra("lineNumber", 0);
-        String[] filePaths = intent.getStringArrayExtra("filePaths");
+        ArrayList<String> filePaths = intent.getStringArrayListExtra("filePaths");
+        fileName = intent.getStringExtra("fileName");
         if (filePaths != null) {
-            filePath = filePaths[0];
+            filePath = findFilePath(filePaths);
         }
 
         String msgText = intent.getStringExtra("displayMsg");
@@ -98,6 +101,20 @@ public class FixErrorsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String findFilePath(ArrayList<String> filePaths)
+    {
+        for(String path : filePaths)
+        {
+            String[] check = path.split("/");
+            //porownaj ostatni czlon sciezki - nazwe pliku
+            if(fileName.equals(check[check.length-1]))
+            {
+                return path;
+            }
+        }
+        return "nope!";
     }
 
     /**

@@ -12,7 +12,9 @@ import (
 )
 
 type b64Data struct {
-	Encode string `json:"encode"`
+	Encode []string `json:"encode"`
+  FileNames []string `json:"filenames"`
+  MainFile string `json:"mainfile"`
   Flags string `json:"flags"`
 }
 
@@ -30,41 +32,50 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 	//zdekoduj plik w b64 bedacy cialem post requesta
     decoder := json.NewDecoder(req.Body)
     var t b64Data
+    log.Println("Init")
     err := decoder.Decode(&t)
     if err != nil {
         panic(err)
     }
     //wypisuje zakodowana tresc jsona
     //log.Println(t)
+
+    log.Println("Init2222")
 	tb64 := t.Encode
+  filenames := t.FileNames
   flags := t.Flags
-	dec, err := base64.StdEncoding.DecodeString(tb64)
+  mainfile := t.MainFile
 	if err != nil {
 		panic(err)
 	}
 
-	var fileName = "checkedFile.c"
+  log.Println("First")
 
-	f, err := os.Create(fileName)
-	if err != nil {
-    fmt.Println("One")
-		panic(err)
-	}
-	defer f.Close()
+  for fileIndex := 0;  fileIndex < len(filenames); fileIndex++ {
+    dec, err := base64.StdEncoding.DecodeString(tb64[fileIndex])
 
-	//wypisz zdekodowana zawartosc do pliku .c o ustalonej nazwie
-	if _, err := f.Write(dec); err != nil {
-    fmt.Println("Two")
-		panic(err)
-	}
+    f,err := os.Create(filenames[fileIndex])
+    if err != nil {
+      fmt.Println("One")
+  		panic(err)
+  	}
+  	defer f.Close()
 
-	if err := f.Sync(); err != nil {
-    fmt.Println("Three")
-		panic(err)
-	}
+    //wypisz zdekodowana zawartosc do pliku .c o ustalonej nazwie
+  	if _, err := f.Write(dec); err != nil {
+      fmt.Println("Two")
+  		panic(err)
+  	}
 
-// tu beda zmiany we flagach
-  cmd := exec.Command("bash", "-c", "gcc " + fileName + " " + flags)
+  	if err := f.Sync(); err != nil {
+      fmt.Println("Three")
+  		panic(err)
+  	}
+    log.Println("Second")
+  }
+  log.Println(mainfile)
+
+  cmd := exec.Command("bash", "-c", "gcc " + mainfile + " " + flags)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
     //fmt.Println("ONE")
