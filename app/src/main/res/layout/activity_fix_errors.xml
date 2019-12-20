@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".FixErrorsActivity"
     android:gravity="center">
     <TextView
         android:id="@+id/displayMsg"
         android:padding="5dp"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textColor="@color/errorDark"
         android:background="@color/errorLight"/>
-    <EditText
-        android:id="@+id/editCode"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/displayMsg"
-        android:scrollbars="vertical"
-        android:autofillHints="Here is your code"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        tools:ignore="UnusedAttribute"/>
+        android:layout_above="@+id/bottomButtons"
+        android:layout_below="@+id/displayMsg">
+        <EditText
+            android:id="@+id/editCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:autofillHints="Here is your code"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            tools:ignore="UnusedAttribute"/>
+    </ScrollView>
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/bottomButtons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editCode"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
         <Button
             style="@style/buttonsStyleRev"

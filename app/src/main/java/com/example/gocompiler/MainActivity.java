@@ -2,9 +2,10 @@ package com.example.gocompiler;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,7 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +30,14 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     final int ACT_2_REQUEST = 1;
-    String[] filePaths;
+    ArrayList<String> filePaths;
+    String[] chosenFileNames;
+    String mainFileName;
     HashMap<String, Integer> selectedItems;
     TextView dirTV;
+    TextView mainTV;
     Button errorListBtn;
+    Button chooseMainBtn;
     String flags = " -Wall";
     List<String> choicesList;
 
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         selectedItems = new HashMap<>();
         choicesList = Arrays.asList(getResources().getStringArray(R.array.flags));
 
+        mainTV = findViewById(R.id.mainTV);
+        mainTV.setText(R.string.no_main);
         dirTV = findViewById(R.id.dirTV);
         dirTV.setText(R.string.path);
 
@@ -62,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
                 displayFlagOptions();
             }
         });
+
+        chooseMainBtn = findViewById(R.id.chooseMainBtn);
+        chooseMainBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayMainPicker();
+            }
+        });
+        chooseMainBtn.setClickable(false);
 
         errorListBtn = findViewById(R.id.sendSrvBtn);
         errorListBtn.setOnClickListener(new View.OnClickListener() {
@@ -130,14 +145,46 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
+    private void setChosenFileNames()
+    {
+        final String[] fileNames = filePaths.toArray(new String[0]);
+        for(int fileName=0; fileName < fileNames.length; fileName++)
+        {
+            String[] temp = fileNames[fileName].split("/");
+            fileNames[fileName] = temp[temp.length-1];
+        }
+        chosenFileNames = fileNames;
+    }
+
+    private void displayMainPicker()
+    {
+        mainFileName = "";
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.choose_main);
+        builder.setSingleChoiceItems(chosenFileNames, -1,
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mainFileName = chosenFileNames[which];
+                TextView mainTV = findViewById(R.id.mainTV);
+                mainTV.setText(mainFileName);
+                errorListBtn.setClickable(true);
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void startFilePicker()
     {
         DialogProperties properties = new DialogProperties();
-        properties.selection_mode = DialogConfigs.SINGLE_MODE;
+        properties.selection_mode = DialogConfigs.MULTI_MODE;
         properties.selection_type = DialogConfigs.FILE_SELECT;
         properties.root = new File(DialogConfigs.DEFAULT_DIR);
         properties.error_dir = new File(DialogConfigs.DEFAULT_DIR);
@@ -147,12 +194,14 @@ public class MainActivity extends AppCompatActivity {
         FilePickerDialog fpd = new FilePickerDialog(this, properties);
         fpd.setTitle("Select a file:");
         fpd.setDialogSelectionListener(new DialogSelectionListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onSelectedFilePaths(String[] files) {
                 //files = array of paths of files selected
-                filePaths = files;
-                errorListBtn.setClickable(true);
-                dirTV.setText(Arrays.toString(filePaths));
+                filePaths = new ArrayList<String>(Arrays.asList(files));
+                setChosenFileNames();
+                dirTV.setText(String.join(", ", chosenFileNames));
+                chooseMainBtn.setClickable(true);
             }
         });
 
@@ -162,8 +211,9 @@ public class MainActivity extends AppCompatActivity {
     private void openActivityDispErr()
     {
         Intent intent = new Intent(this, DisplayErrorsActivity.class);
-        intent.putExtra(String.valueOf(R.string.file_paths_intent), filePaths);
+        intent.putStringArrayListExtra(String.valueOf(R.string.file_paths_intent), filePaths);
         intent.putExtra(String.valueOf(R.string.flags_intent), flags);
+        intent.putExtra(String.valueOf(R.string.main), mainFileName);
         startActivityForResult(intent, ACT_2_REQUEST);
     }
 

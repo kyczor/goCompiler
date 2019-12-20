@@ -24,11 +24,30 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/dirTV"/>
 
+    <Button
+        style="@style/buttonsStyle"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:id="@+id/chooseMainBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/dirTV"
+        android:text="@string/chooseMain"/>
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chooseMainBtn"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/mainTV"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/dirTV"
+        android:layout_below="@+id/mainTV"
         android:layout_margin="10dp"
         android:layout_centerHorizontal="true">
         <Button

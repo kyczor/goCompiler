@@ -41,7 +41,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
     Intent prevIntent;
     String dirPath;
     String flags;
-    String[] filePaths;
+    ArrayList<String> filePaths;
     AsyncTask<Integer, Void, Void> executePostReq;
 
     @Override
@@ -52,7 +52,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         prevIntent = getIntent();
         dirPath = prevIntent.getStringExtra(String.valueOf(R.string.path_intent));
         flags = prevIntent.getStringExtra(String.valueOf(R.string.flags_intent));
-        filePaths = prevIntent.getStringArrayExtra(String.valueOf(R.string.file_paths_intent));
+        filePaths = prevIntent.getStringArrayListExtra(String.valueOf(R.string.file_paths_intent));
 
         Button backB = findViewById(R.id.goBackFromErrors);
         backB.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +174,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         try {
             byte[] bytes = new byte[(int)file.length() + 100];
             int length = new FileInputStream(file).read(bytes);
-            b64encoding = Base64.encodeToString(bytes, 0, length, Base64.NO_WRAP);
+            b64encoding = "\"" + Base64.encodeToString(bytes, 0, length, Base64.NO_WRAP) + "\"";
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,12 +184,16 @@ public class DisplayErrorsActivity extends AppCompatActivity {
     }
 
     private void sendPostRequest() throws IOException {
-        String base64file = encodeB64File(filePaths[0]);
+        String base64files = encodeAllFiles();
+        String fileNames = fileNamesToString();
+        //String base64file = encodeB64File(filePaths[0]);
         //String postJson = "{\"encode\": \"" + base64file + "\"}";
-        String postJson = "{\"encode\": \"" + base64file + "\", \"flags\": \"" + flags + "\"}";
+        String postJson = "{\"encode\": [" + base64files + "], \"names\": [" + fileNames + "], \"flags\": \"" + flags + "\"}";
 
         System.out.println("POST JSON: " + postJson);
-        URL url = new URL("http://192.168.0.11:8014/b64");
+       // URL url = new URL("http://54.80.215.77:8014/b64");
+        URL url = new URL("http://172.20.10.2:8014/b64");
+
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
         client.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -214,6 +218,29 @@ public class DisplayErrorsActivity extends AppCompatActivity {
             displayErrorButtons(errorsParsed, warningsParsed);
         }
         return;
+    }
+
+    private String encodeAllFiles()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int fileId = 0; fileId<filePaths.size(); fileId++)
+        {
+            sb.append(encodeB64File(filePaths.get(fileId)));
+            sb.append(", ");
+        }
+        return sb.substring(0, sb.length()-2);
+    }
+
+    private String fileNamesToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int fileId = 0; fileId<filePaths.size(); fileId++)
+        {
+            String[] parts = filePaths.get(fileId).split("/");
+            sb.append(parts[parts.length-1]);   //wez ostatnia czastke sciezki, czyli nazwe pliku
+            sb.append(", ");
+        }
+        return sb.substring(0, sb.length()-2);
     }
 
     /**

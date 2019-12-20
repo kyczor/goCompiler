@@ -11,7 +11,8 @@
     <string name="ok">Ok</string>
     <string name="act2info">Activity 2!</string>
     <string name="path">Path not selected</string>
-    <string name="chooseDir">Choose file to compile</string>
+    <string name="chooseDir">Choose files to compile</string>
+    <string name="chooseMain">Choose main file</string>
     <string name="comp_succ">Compilation successful!</string>
     <string name="line">Line</string>
     <string name="errorMsg">Error message</string>
@@ -21,7 +22,10 @@
     <string name="comp_success">Compilation successful!</string>
     <string name="recompile">Retry</string>
     <string name="choose_flags">Choose flags</string>
+    <string name="choose_main">Choose main</string>
     <string name="path_intent">path</string>
     <string name="flags_intent">flags</string>
-    <string name="file_paths_intent">filePaths</string>
+    <string name="main">main</string>
+    <string name="file_paths_intent">allFilePaths</string>
+    <string name="no_main">Main not selected</string>
 </resources>
