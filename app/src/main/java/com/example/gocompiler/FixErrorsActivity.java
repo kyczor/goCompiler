@@ -79,6 +79,7 @@ public class FixErrorsActivity extends AppCompatActivity {
 
         et = findViewById(R.id.editCode);
         et.setText(text.toString());
+        et.requestFocus();
         et.setSelection(cursorIndex);
 
         Button cancelBtn = findViewById(R.id.cancelFix);
