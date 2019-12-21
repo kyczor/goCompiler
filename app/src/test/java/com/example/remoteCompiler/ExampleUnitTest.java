@@ -1,4 +1,4 @@
-package com.example.gocompiler;
+package com.example.remoteCompiler;
 
 import org.junit.Test;
 
