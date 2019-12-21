@@ -2,40 +2,39 @@
 
 title __APP's Class Diagram__\n
 
-  namespace com.example.gocompiler {
-    class com.example.gocompiler.Activity1 {
+  namespace com.example.remoteCompiler {
+    class com.example.remoteCompiler.BuildConfig {
     }
   }
   
 
-  namespace com.example.gocompiler {
-    class com.example.gocompiler.BuildConfig {
+  namespace com.example.remoteCompiler {
+    class com.example.remoteCompiler.DisplayErrorsActivity {
     }
   }
   
 
-  namespace com.example.gocompiler {
-    class com.example.gocompiler.ErrorsData {
+  namespace com.example.remoteCompiler {
+    class com.example.remoteCompiler.ErrorsData {
     }
   }
   
 
-  namespace com.example.gocompiler {
-    class com.example.gocompiler.FixErrorsActivity {
+  namespace com.example.remoteCompiler {
+    class com.example.remoteCompiler.FixErrorsActivity {
     }
   }
   
 
-  namespace com.example.gocompiler {
-    class com.example.gocompiler.MainActivity {
+  namespace com.example.remoteCompiler {
+    class com.example.remoteCompiler.MainActivity {
     }
   }
   
 
-  com.example.gocompiler.Activity1 .up.|> android.view.View.OnClickListener
-  com.example.gocompiler.Activity1 -up-|> androidx.appcompat.app.AppCompatActivity
-  com.example.gocompiler.FixErrorsActivity -up-|> androidx.appcompat.app.AppCompatActivity
-  com.example.gocompiler.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.remoteCompiler.DisplayErrorsActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.remoteCompiler.FixErrorsActivity -up-|> androidx.appcompat.app.AppCompatActivity
+  com.example.remoteCompiler.MainActivity -up-|> androidx.appcompat.app.AppCompatActivity
 
 
 right footer
