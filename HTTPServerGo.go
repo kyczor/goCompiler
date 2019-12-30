@@ -28,23 +28,7 @@ func hello(w http.ResponseWriter, req *http.Request) {
     fmt.Fprintf(w, "hello\n")
 }
 
-func b64(rw http.ResponseWriter, req *http.Request) {
-	//zdekoduj plik w b64 bedacy cialem post requesta
-  decoder := json.NewDecoder(req.Body)
-  var t b64Data
-  err := decoder.Decode(&t)
-  if err != nil {
-      panic(err)
-  }
-
-	tb64 := t.Encode
-  filenames := t.FileNames
-  flags := t.Flags
-  mainfile := t.MainFile
-	if err != nil {
-		panic(err)
-	}
-
+func createUpdateFiles(filenames []string, tb64 []string) {
   for fileIndex := 0;  fileIndex < len(filenames); fileIndex++ {
     dec, err := base64.StdEncoding.DecodeString(tb64[fileIndex])
 
@@ -63,6 +47,26 @@ func b64(rw http.ResponseWriter, req *http.Request) {
   		panic(err)
   	}
   }
+}
+
+func compile(rw http.ResponseWriter, req *http.Request) {
+	//zdekoduj plik w b64 bedacy cialem post requesta
+  decoder := json.NewDecoder(req.Body)
+  var t b64Data
+  err := decoder.Decode(&t)
+  if err != nil {
+      panic(err)
+  }
+
+	tb64 := t.Encode
+  filenames := t.FileNames
+  flags := t.Flags
+  mainfile := t.MainFile
+	if err != nil {
+		panic(err)
+	}
+  createUpdateFiles(filenames, tb64)
+
   log.Println(mainfile)
 
   //wywolaj polecenie kompilacji wybranego pliku glownego z flagami kompilacji
@@ -98,7 +102,7 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 func main() {
 
   http.HandleFunc("/hello", hello)
-	http.HandleFunc("/b64", b64)
+	http.HandleFunc("/b64", compile)
 
 	log.Println("Go!")
 
