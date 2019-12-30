@@ -30,17 +30,13 @@ func hello(w http.ResponseWriter, req *http.Request) {
 
 func b64(rw http.ResponseWriter, req *http.Request) {
 	//zdekoduj plik w b64 bedacy cialem post requesta
-    decoder := json.NewDecoder(req.Body)
-    var t b64Data
-    log.Println("Init")
-    err := decoder.Decode(&t)
-    if err != nil {
-        panic(err)
-    }
-    //wypisuje zakodowana tresc jsona
-    //log.Println(t)
+  decoder := json.NewDecoder(req.Body)
+  var t b64Data
+  err := decoder.Decode(&t)
+  if err != nil {
+      panic(err)
+  }
 
-    log.Println("Init2222")
 	tb64 := t.Encode
   filenames := t.FileNames
   flags := t.Flags
@@ -49,41 +45,34 @@ func b64(rw http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-  log.Println("First")
-
   for fileIndex := 0;  fileIndex < len(filenames); fileIndex++ {
     dec, err := base64.StdEncoding.DecodeString(tb64[fileIndex])
 
     f,err := os.Create(filenames[fileIndex])
     if err != nil {
-      fmt.Println("One")
   		panic(err)
   	}
   	defer f.Close()
 
     //wypisz zdekodowana zawartosc do pliku .c o ustalonej nazwie
   	if _, err := f.Write(dec); err != nil {
-      fmt.Println("Two")
   		panic(err)
   	}
 
   	if err := f.Sync(); err != nil {
-      fmt.Println("Three")
   		panic(err)
   	}
-    log.Println("Second")
   }
   log.Println(mainfile)
 
+  //wywolaj polecenie kompilacji wybranego pliku glownego z flagami kompilacji
   cmd := exec.Command("bash", "-c", "gcc " + mainfile + " " + flags)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
-    //fmt.Println("ONE")
 		log.Fatal(err)
 	}
 
 	if err := cmd.Start(); err != nil {
-    //fmt.Println("TWO")
 		log.Fatal(err)
 	}
 
@@ -95,10 +84,9 @@ func b64(rw http.ResponseWriter, req *http.Request) {
     fmt.Println("Errors found!")
     fmt.Println(err)
     didCompile = false
-		//log.Fatal(err)
 	}
 
-  //umiesc w jsonie, zakoduj do b64 i wyslij jako response
+  //umiesc w formacie json, zakoduj do b64 i wyslij jako response
   sSlurp := string(slurp)
   retData := b64Output{didCompile, sSlurp}
   retJson, err := json.Marshal(retData)
