@@ -206,7 +206,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
 
         System.out.println("POST JSON: " + postJson);
        // URL url = new URL("http://54.80.215.77:8014/b64");
-        URL url = new URL("http://192.168.0.11:8014/b64");
+        URL url = new URL("http://192.168.0.14:8014/b64");
 
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
@@ -282,7 +282,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         parsed = new ArrayList<>();
         for(String err : temp)
         {
-            //sprawdz czy to ma forme erroru
+            //sprawdz czy to ma forme warninga
             if(Pattern.compile("[a-zA-Z]+(.c:)\\d+(.)\\d+(: warning: ).*").matcher(err).matches())
             {
                 parsed.add(err);

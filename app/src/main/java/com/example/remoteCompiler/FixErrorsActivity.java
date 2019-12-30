@@ -1,13 +1,18 @@
 package com.example.remoteCompiler;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +28,8 @@ public class FixErrorsActivity extends AppCompatActivity {
     EditText et;
     String filePath;
     String fileName;
+
+    private static final int STORAGE_PERMISSION_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,10 @@ public class FixErrorsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        myCheckPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                STORAGE_PERMISSION_CODE);
     }
 
     private String findFilePath(ArrayList<String> filePaths)
@@ -124,6 +135,25 @@ public class FixErrorsActivity extends AppCompatActivity {
         out.write(contents);
         out.flush();
         out.close();
+    }
+
+    // Function to check and request permission.
+    public void myCheckPermission(String permission, int requestCode)
+    {
+        if (ContextCompat.checkSelfPermission(FixErrorsActivity.this, permission)
+                == PackageManager.PERMISSION_DENIED) {
+
+            // Requesting the permission
+            ActivityCompat.requestPermissions(FixErrorsActivity.this,
+                    new String[] { permission },
+                    requestCode);
+        }
+        else {
+            Toast.makeText(FixErrorsActivity.this,
+                    "Permission already granted",
+                    Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     private void tryAgain()
