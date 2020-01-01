@@ -272,7 +272,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         for(String err : temp)
         {
             //sprawdz czy to ma forme erroru
-            if(Pattern.compile("[a-zA-Z]+(.c:)\\d+(.)\\d+(: error: ).*").matcher(err).matches())
+            if(Pattern.compile(".+[a-zA-Z]+(.c:)\\d+(.)\\d+(: error: ).*").matcher(err).matches())
             {
                 parsed.add(err);
             }
@@ -283,7 +283,7 @@ public class DisplayErrorsActivity extends AppCompatActivity {
         for(String err : temp)
         {
             //sprawdz czy to ma forme warninga
-            if(Pattern.compile("[a-zA-Z]+(.c:)\\d+(.)\\d+(: warning: ).*").matcher(err).matches())
+            if(Pattern.compile(".+[a-zA-Z]+(.c:)\\d+(.)\\d+(: warning: ).*").matcher(err).matches())
             {
                 parsed.add(err);
             }
