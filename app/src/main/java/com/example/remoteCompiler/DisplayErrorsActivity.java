@@ -125,7 +125,8 @@ public class DisplayErrorsActivity extends AppCompatActivity {
             row.setLayoutParams(params);
             Button lineBtn = (Button)getLayoutInflater().inflate(R.layout.buttontemplate, null);
             StringBuilder sb = new StringBuilder();
-            sb.append(errParts[0]);
+            String[] filenameParts = errParts[0].split("/");
+            sb.append(filenameParts[filenameParts.length-1]);
             sb.append("\n");
             sb.append("Line: ");
             sb.append(errParts[1]);
@@ -205,8 +206,8 @@ public class DisplayErrorsActivity extends AppCompatActivity {
                 "\"flags\": \"" + flags + "\"}";
 
         System.out.println("POST JSON: " + postJson);
-       // URL url = new URL("http://54.80.215.77:8014/b64");
-        URL url = new URL("http://192.168.0.14:8014/b64");
+        URL url = new URL("http://54.80.215.77:8014/b64");
+        // URL url = new URL("http://192.168.0.14:8014/b64");
 
         HttpURLConnection client = (HttpURLConnection) url.openConnection();
         client.setRequestMethod("POST");
