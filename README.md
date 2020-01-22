@@ -15,3 +15,7 @@ Here are some screenshots from the app:
 ![List of errors and warnings](/compiler_3.png)
 ![Code editor](/compiler_4.png)
 ![Success](/compiler_6.png)
+
+In order to protect users' data every time some code is being sent to the server, a temporary folder is created. The files that are being compiled are kept in the folder and after receiving results of a compilation the whole folder is deleted.
+
+All the data is being passed between client and server using JSON format.
